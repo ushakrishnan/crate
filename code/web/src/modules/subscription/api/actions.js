@@ -1,6 +1,6 @@
 // Imports
 import axios from 'axios'
-import queryBuilder from 'gql-query-builder'
+import { query, mutation } from 'gql-query-builder'
 
 // App Imports
 import { routeApi } from '../../../setup/routes'
@@ -27,8 +27,7 @@ export function getList(isLoading = true) {
       isLoading
     })
 
-    return axios.post(routeApi, queryBuilder({
-      type: 'query',
+    return axios.post(routeApi, query({
       operation: 'subscriptions',
       fields: ['id', 'user { name, email }', 'crate { id, name, description }', 'createdAt']
     }))
@@ -64,8 +63,7 @@ export function getListByUser(isLoading = true) {
       isLoading
     })
 
-    return axios.post(routeApi, queryBuilder({
-      type: 'query',
+    return axios.post(routeApi, query({
       operation: 'subscriptionsByUser',
       fields: ['id', 'user { name, email }', 'crate { id, name, description }', 'createdAt']
     }))
@@ -99,8 +97,7 @@ export function get(slug, isLoading = true) {
       isLoading
     })
 
-    return axios.post(routeApi, queryBuilder({
-      type: 'query',
+    return axios.post(routeApi, query({
       operation: 'subscription',
       variables: { slug },
       fields: ['id', 'user { name, email }', 'crate { id, name, description }', 'createdAt']
@@ -124,25 +121,22 @@ export function get(slug, isLoading = true) {
 }
 
 // Create subscription
-export function create(data) {
-  console.log(data)
+export function create(variables) {
   return dispatch => {
-    return axios.post(routeApi, queryBuilder({
-      type: 'mutation',
+    return axios.post(routeApi, mutation({
       operation: 'subscriptionCreate',
-      data,
+      variables,
       fields: ['id']
     }))
   }
 }
 
 // Remove subscription
-export function remove(data) {
+export function remove(variables) {
   return dispatch => {
-    return axios.post(routeApi, queryBuilder({
-      type: 'mutation',
+    return axios.post(routeApi, mutation({
       operation: 'subscriptionRemove',
-      data,
+      variables,
       fields: ['id']
     }))
   }
