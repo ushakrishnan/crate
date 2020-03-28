@@ -1,10 +1,10 @@
 // Imports
 import React from 'react'
-import { StyleSheet, TextInput } from 'react-native'
+import { StyleSheet, TextInput, Platform } from 'react-native'
 
 // UI Imports
-import { blockMargin, blockPaddingHalf, font } from '../common/responsive'
-import { grey2 } from '../common/colors'
+import { scalable, blockPaddingHalf, font } from '../common/responsive'
+import { grey1, grey2 } from '../common/colors'
 
 // Component
 const InputText = ({ onSubmitEditing, inputRef, ...props}) => {
@@ -27,9 +27,12 @@ export default InputText
 // Component Styles
 const styles = StyleSheet.create({
   container: {
-    marginBottom: blockMargin,
-    paddingHorizontal: blockPaddingHalf,
-    height: font(35),
+    flex: 1,
+    paddingVertical: blockPaddingHalf * 1.3,
+    paddingHorizontal: blockPaddingHalf * 1.5,
     fontSize: font(18),
+    height: scalable(48),
+    borderBottomWidth: Platform.OS === 'android' ? 0 : 1,
+    borderColor: grey1
   }
 })

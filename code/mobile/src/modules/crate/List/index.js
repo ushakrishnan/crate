@@ -20,13 +20,17 @@ import { routes } from '../../../setup/routes'
 class List extends PureComponent {
 
   componentDidMount() {
-    this.props.getCratesList()
+    const { dispatch } = this.props
+
+    dispatch(getCratesList())
   }
 
-  onSuccessSubscription = () => {
-    this.props.getSubscriptionListByUser(this.props.user.details.email)
+  #onSuccessSubscription = () => {
+    const { navigation, dispatch } = this.props
 
-    this.props.navigation.navigate(routes.account.name)
+    dispatch(getSubscriptionListByUser(this.props.user.details.email))
+
+    navigation.navigate(routes.account.name)
   }
 
   render() {
@@ -37,14 +41,14 @@ class List extends PureComponent {
         {
           isLoading
             ? <Loading />
-            : list.length > 0
+            : list && list.length > 0
               ? <ScrollView style={styles.itemContainer}>
                   { list.map((crate, i) => (
                     <CrateItem
                       key={crate.id}
                       crate={crate}
                       lastItem={list.length - 1 === i}
-                      onSuccessSubscription={this.onSuccessSubscription}
+                      onSuccessSubscription={this.#onSuccessSubscription}
                     />
                   )) }
                 </ScrollView>
@@ -58,17 +62,15 @@ class List extends PureComponent {
 // Component Properties
 List.propTypes = {
   crates: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired,
-  getCratesList: PropTypes.func.isRequired,
-  getSubscriptionListByUser: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired
 }
 
 // Component State
 function listState(state) {
   return {
     crates: state.crates,
-    user: state.user,
+    user: state.user
   }
 }
 
-export default connect(listState, { getCratesList, getSubscriptionListByUser })(withNavigation(List))
+export default connect(listState)(withNavigation(List))
